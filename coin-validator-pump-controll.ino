@@ -4,7 +4,7 @@
 #include <EEPROM.h>
 #include "OneButton.h"
 
-#define CLK 2
+#define CLK 7
 #define DIO 3
 
 TM1637Display display(CLK, DIO);
@@ -34,6 +34,13 @@ int button1_State = 0;
 int button2_State = 0;
 int button3_State = 0;
 
+int sensor = 2;
+int i = 0;
+int k = 0;
+int kc = 0;
+int i10 = 0;
+int stat = 0;
+
 void setup() {
   Serial.begin(9600);
 
@@ -54,9 +61,18 @@ void setup() {
   button1.attachClick(click1);
   button2.attachClick(click2);
   button3.attachClick(click3);
+
+  pinMode(sensor, INPUT);
+  attachInterrupt(0, doCounter, FALLING);
 }
 
+boolean isCounter = false;
+int count = 0;
+
 void loop() {
+  while (stat == 0) {
+    Coin();
+  }
 
   button1.tick();
   button2.tick();
@@ -89,6 +105,7 @@ void loop() {
     digitalWrite(relay1_Pin, LOW);
     digitalWrite(relay2_Pin, LOW);
     digitalWrite(relay3_Pin, LOW);
+    stat = 0;
 
   } else if (button2_State == 2) {
     value = EEPROM.read(0);
@@ -115,6 +132,7 @@ void loop() {
     digitalWrite(relay1_Pin, LOW);
     digitalWrite(relay2_Pin, LOW);
     digitalWrite(relay3_Pin, LOW);
+    stat = 0;
 
   } else if (button3_State == 3) {
     value = EEPROM.read(0);
@@ -140,7 +158,34 @@ void loop() {
     digitalWrite(relay1_Pin, LOW);
     digitalWrite(relay2_Pin, LOW);
     digitalWrite(relay3_Pin, LOW);
+    stat = 0;
   }
+}
+
+void Coin() {
+  if (isCounter == true) {
+    isCounter = false;
+    delay(500);
+  }
+  if (i != 1000 && count != 0) {
+    i = i + 1;
+  }
+  if (i == 1000) {
+    i = 0;
+    if (count == 10) {
+      i10 = i10 + 1;
+      k = i10 * 10;
+      kc = 10;
+      stat = kc;
+    }
+    count = 0;
+  }
+}
+
+
+void doCounter() {
+  isCounter = true;
+  count++;
 }
 
 void click1() {
