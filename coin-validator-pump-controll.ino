@@ -73,6 +73,10 @@ void loop() {
       digitalWrite(led1_Pin, HIGH);
       digitalWrite(led2_Pin, LOW);
       digitalWrite(led3_Pin, LOW);
+
+      digitalWrite(relay1_Pin, HIGH);
+      digitalWrite(relay2_Pin, LOW);
+      digitalWrite(relay3_Pin, LOW);
       delay(1000);
     }
     current_Time = value;
@@ -81,6 +85,11 @@ void loop() {
     digitalWrite(led1_Pin, LOW);
     digitalWrite(led2_Pin, LOW);
     digitalWrite(led3_Pin, LOW);
+
+    digitalWrite(relay1_Pin, LOW);
+    digitalWrite(relay2_Pin, LOW);
+    digitalWrite(relay3_Pin, LOW);
+
   } else if (button2_State == 2) {
     value = EEPROM.read(0);
     for (int i = value; i >= 0; i--) {
@@ -89,6 +98,11 @@ void loop() {
       digitalWrite(led1_Pin, LOW);
       digitalWrite(led2_Pin, HIGH);
       digitalWrite(led3_Pin, LOW);
+
+      digitalWrite(relay1_Pin, LOW);
+      digitalWrite(relay2_Pin, HIGH);
+      digitalWrite(relay3_Pin, LOW);
+
       delay(1000);
     }
     current_Time = value;
@@ -97,6 +111,11 @@ void loop() {
     digitalWrite(led1_Pin, LOW);
     digitalWrite(led2_Pin, LOW);
     digitalWrite(led3_Pin, LOW);
+
+    digitalWrite(relay1_Pin, LOW);
+    digitalWrite(relay2_Pin, LOW);
+    digitalWrite(relay3_Pin, LOW);
+
   } else if (button3_State == 3) {
     value = EEPROM.read(0);
     for (int i = value; i >= 0; i--) {
@@ -105,6 +124,10 @@ void loop() {
       digitalWrite(led1_Pin, LOW);
       digitalWrite(led2_Pin, LOW);
       digitalWrite(led3_Pin, HIGH);
+
+      digitalWrite(relay1_Pin, LOW);
+      digitalWrite(relay2_Pin, LOW);
+      digitalWrite(relay3_Pin, HIGH);
       delay(1000);
     }
     current_Time = value;
@@ -113,6 +136,10 @@ void loop() {
     digitalWrite(led1_Pin, LOW);
     digitalWrite(led2_Pin, LOW);
     digitalWrite(led3_Pin, LOW);
+
+    digitalWrite(relay1_Pin, LOW);
+    digitalWrite(relay2_Pin, LOW);
+    digitalWrite(relay3_Pin, LOW);
   }
 }
 
