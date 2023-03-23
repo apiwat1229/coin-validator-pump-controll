@@ -30,10 +30,6 @@ const byte relay1_Pin = 8;
 const byte relay2_Pin = 9;
 const byte relay3_Pin = 10;
 
-const int button1_Pin = 12;
-const int button2_Pin = 11;
-const int button3_Pin = 10;
-
 int button1_State = 0;
 int button2_State = 0;
 int button3_State = 0;
@@ -53,9 +49,6 @@ void setup() {
   pinMode(led1_Pin, OUTPUT);
   pinMode(led2_Pin, OUTPUT);
   pinMode(led3_Pin, OUTPUT);
-  pinMode(button1_Pin, INPUT_PULLUP);
-  pinMode(button2_Pin, INPUT_PULLUP);
-  pinMode(button3_Pin, INPUT_PULLUP);
 
   display.showNumberDec(current_Time);
   button1.attachClick(click1);
@@ -77,11 +70,49 @@ void loop() {
     for (int i = value; i >= 0; i--) {
       display.showNumberDec(current_Time);
       current_Time--;
+      digitalWrite(led1_Pin, HIGH);
+      digitalWrite(led2_Pin, LOW);
+      digitalWrite(led3_Pin, LOW);
       delay(1000);
     }
     current_Time = value;
     button1_State = 0;
     display.showNumberDec(current_Time);
+    digitalWrite(led1_Pin, LOW);
+    digitalWrite(led2_Pin, LOW);
+    digitalWrite(led3_Pin, LOW);
+  } else if (button2_State == 2) {
+    value = EEPROM.read(0);
+    for (int i = value; i >= 0; i--) {
+      display.showNumberDec(current_Time);
+      current_Time--;
+      digitalWrite(led1_Pin, LOW);
+      digitalWrite(led2_Pin, HIGH);
+      digitalWrite(led3_Pin, LOW);
+      delay(1000);
+    }
+    current_Time = value;
+    button2_State = 0;
+    display.showNumberDec(current_Time);
+    digitalWrite(led1_Pin, LOW);
+    digitalWrite(led2_Pin, LOW);
+    digitalWrite(led3_Pin, LOW);
+  } else if (button3_State == 3) {
+    value = EEPROM.read(0);
+    for (int i = value; i >= 0; i--) {
+      display.showNumberDec(current_Time);
+      current_Time--;
+      digitalWrite(led1_Pin, LOW);
+      digitalWrite(led2_Pin, LOW);
+      digitalWrite(led3_Pin, HIGH);
+      delay(1000);
+    }
+    current_Time = value;
+    button2_State = 0;
+    display.showNumberDec(current_Time);
+    digitalWrite(led1_Pin, LOW);
+    digitalWrite(led2_Pin, LOW);
+    digitalWrite(led3_Pin, LOW);
   }
 }
 
@@ -90,12 +121,12 @@ void click1() {
   Serial.println("Button 1 stat = " + String(button1_State));
 }  // click1
 void click2() {
-  button1_State = 2;
-  Serial.println("Button 1 stat = " + String(button2_State));
+  button2_State = 2;
+  Serial.println("Button 2 stat = " + String(button2_State));
 }  // click1
 void click3() {
-  button1_State = 3;
-  Serial.println("Button 1 stat = " + String(button3_State));
+  button3_State = 3;
+  Serial.println("Button 3 stat = " + String(button3_State));
 }  // click1
 
 void blink_led() {
@@ -114,21 +145,6 @@ void blink_led() {
   }
 }
 
-void get_buttonStat() {
-  unsigned long currentMillis = millis();
-
-  if (currentMillis - previousMillis_2 >= 100) {
-    previousMillis_2 = currentMillis;
-
-    button1_State = digitalRead(button1_Pin);
-    button2_State = digitalRead(button2_Pin);
-    button3_State = digitalRead(button3_Pin);
-
-    if (button1_State == 0) {
-      Serial.println(button1_State);
-    }
-  }
-}
 void get_rotaryStat() {
   rotate = rotary.rotate();
   rotary_button = rotary.pushType(1000);
