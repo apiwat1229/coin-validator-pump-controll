@@ -13,7 +13,8 @@ SimpleRotary rotary(4, 5, 6);
 
 OneButton button1(A3, true);
 OneButton button2(A4, true);
-OneButton button3(A5, true);
+
+#define buzzerPin 13
 
 byte rotate, rotary_button, time_counter, value;
 byte current_Time;
@@ -55,11 +56,12 @@ void setup() {
   pinMode(led1_Pin, OUTPUT);
   pinMode(led2_Pin, OUTPUT);
   pinMode(led3_Pin, OUTPUT);
+  pinMode(A5, INPUT_PULLUP);
+  pinMode(buzzerPin, OUTPUT);
 
   display.showNumberDec(current_Time);
   button1.attachClick(click1);
   button2.attachClick(click2);
-  button3.attachClick(click3);
 
   pinMode(sensor, INPUT);
   attachInterrupt(0, doCounter, FALLING);
@@ -72,20 +74,36 @@ void loop() {
   while (count == 0) {
     Coin();
     display.showNumberDec(00);
-    
+    Serial.println("Waiting Coin");
+    delay(100);
   }
 
   button1.tick();
   button2.tick();
-  button3.tick();
+
 
   get_rotaryStat();
   blink_led();
 
+  button3_State = digitalRead(A5);
+
   if (button1_State == 1) {
     value = EEPROM.read(0);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
     for (int i = value; i >= 0; i--) {
       display.showNumberDec(current_Time);
+      Serial.println(current_Time);
       current_Time--;
       digitalWrite(led1_Pin, HIGH);
       digitalWrite(led2_Pin, LOW);
@@ -110,8 +128,21 @@ void loop() {
 
   } else if (button2_State == 2) {
     value = EEPROM.read(0);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
     for (int i = value; i >= 0; i--) {
       display.showNumberDec(current_Time);
+      Serial.println(current_Time);
       current_Time--;
       digitalWrite(led1_Pin, LOW);
       digitalWrite(led2_Pin, HIGH);
@@ -135,10 +166,23 @@ void loop() {
     digitalWrite(relay3_Pin, LOW);
     count = 0;
 
-  } else if (button3_State == 3) {
+  } else if (button3_State == 0) {
     value = EEPROM.read(0);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
     for (int i = value; i >= 0; i--) {
       display.showNumberDec(current_Time);
+      Serial.println(current_Time);
       current_Time--;
       digitalWrite(led1_Pin, LOW);
       digitalWrite(led2_Pin, LOW);
@@ -169,16 +213,29 @@ void Coin() {
     delay(500);
   }
   if (count > 1) {
-      i = i + 1;
-      Serial.print("จำนวนเหรียญ : ");
-      Serial.println(i);
-      c = i * 10;
-      Serial.print("จำนวนเงิน : ");
-      Serial.print(c);
-      Serial.println(" บาท");
-      delay(1000);
-      count = 0;
-    }
+    i = i + 1;
+    Serial.print("จำนวนเหรียญ : ");
+    Serial.println(i);
+    c = i * 10;
+    Serial.print("จำนวนเงิน : ");
+    Serial.print(c);
+    Serial.println(" บาท");
+    delay(1000);
+
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    digitalWrite(buzzerPin, HIGH);
+    delay(150);
+    digitalWrite(buzzerPin, LOW);
+    delay(150);
+    // count = 0;
+  }
 }
 
 
@@ -196,7 +253,7 @@ void click2() {
   Serial.println("Button 2 stat = " + String(button2_State));
 }  // click1
 void click3() {
-  button3_State = 3;
+  // button3_State = 3;
   Serial.println("Button 3 stat = " + String(button3_State));
 }  // click1
 
